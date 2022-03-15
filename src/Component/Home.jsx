@@ -42,25 +42,22 @@ export default function Home() {
     setData(dataCopy);
   };
 
+  // Add new Items
+  const onAddItem = (cardIndex) => {
+    let dataCopy = [...data];
+    dataCopy[cardIndex].items = [
+      ...dataCopy[cardIndex].items,
+      {
+        value: "",
+        placeholder: "edit todo",
+        is_edit_mode: true,
+      },
+    ];
 
- // Add new Items
- const onAddItem = (cardIndex) => {
-  let dataCopy = [...data];
-  dataCopy[cardIndex].items = [
-    ...dataCopy[cardIndex].items,
-    {
-      value: "",
-      placeholder: "edit todo",
-      is_edit_mode: true,
-    },
-  ];
+    setData(dataCopy);
+  };
 
-  setData(dataCopy);
-};
-
-
-
-// item 
+  // item
 
   const onClickEdit = (cardIndex, itemIndex) => {
     let dataCopy = [...data];
@@ -90,8 +87,6 @@ export default function Home() {
     dataCopy[cardIndex].items[itemIndex].value = value;
     setData(dataCopy);
   };
-
- 
 
   // lock Card
   const handleLock = (cardIndex) => {
@@ -126,22 +121,20 @@ export default function Home() {
     ]);
   };
 
+  // drag and drop functions
+  const allowDrop = (ev) => {
+    ev.preventDefault();
+  };
 
+  const drag = (ev) => {
+    ev.dataTransfer.setData("text", ev.target.id);
+  };
 
-// drag and drop functions
-const allowDrop = (ev) => {
-  ev.preventDefault()
-}
-
-const drag = (ev) => {
-  ev.dataTransfer.setData("text", ev.target.id)
-}
-
-const drop = (ev) => {
-  ev.preventDefault()
-  var data = ev.dataTransfer.getData("text")
-  ev.target.appendChild(document.getElementById(data))
-}
+  const drop = (ev) => {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    ev.target.appendChild(document.getElementById(data));
+  };
 
   return (
     <section className="relative">
@@ -169,10 +162,12 @@ const drop = (ev) => {
                     <div className="absolute inset-0 h-full w-full bg-gray-500 bg-opacity-80 rounded-md -skew-y-1  transition-all duration-200 group-hover:skew-y-1"></div>
                     <div className="relative border border-gray-100 bg-gray-500 bg-opacity-80 rounded-md p-4">
                       <div className="space-y-2 h-auto w-full">
-
                         {/* card header */}
                         <div className="flex justify-between items-center text-gray-50 bg-gray-100 bg-opacity-50 rounded-t-md px-2">
-                          <div className="flex gap-x-2 justify-between items-center px-2 py-1 h-auto w-full text-gray-500  rounded-sm text-sm ">
+                          <div
+                            title="Double Click To edit"
+                            className="flex gap-x-2 justify-between items-center px-2 py-1 h-auto w-full text-gray-500  rounded-sm text-sm "
+                          >
                             {card.card_title.map((cardItem, j) => (
                               <div
                                 className=" flex gap-x-2 justify-between items-center w-full cursor-pointer"
@@ -190,7 +185,7 @@ const drop = (ev) => {
                                 ) : (
                                   <span
                                     onDoubleClick={() => ondblClickCard(i, j)}
-                                    className="text-gray-50 font-semibold text-base capitalize py-2 px-6  text-center "
+                                    className="text-gray-50 font-semibold text-base capitalize py-2 px-2 w-full  text-center "
                                   >
                                     {cardItem.title}
                                   </span>
@@ -211,56 +206,81 @@ const drop = (ev) => {
 
                           <div className="flex gap-x-2 justify-between items-center">
                             {card.is_locked ? (
-                              <svg
+                              <button
+                                title="Unlock"
                                 onClick={() => handleLock(i)}
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-5 w-5 hover:text-red-700 cursor-pointer"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                strokeWidth="2"
                               >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                                />
-                              </svg>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-5 w-5 hover:text-cyan-700 cursor-pointer"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"
+                                  />
+                                </svg>
+                              </button>
                             ) : (
-                              <svg
+                              <button
+                                title="Lock"
                                 onClick={() => handleLock(i)}
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-5 w-5 hover:text-cyan-700 cursor-pointer"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                strokeWidth="2"
                               >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"
-                                />
-                              </svg>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-5 w-5 hover:text-red-700 cursor-pointer"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                                  />
+                                </svg>
+                              </button>
                             )}
 
                             <button
-                              className="  px-2 py-1 h-auto  bg-gray-600 text-gray-300 hover:text-cyan-700   text-sm font-semibold rounded text-sm whitespace-nowrap"
+                              className="  px-2 py-1 h-auto text-gray-50 hover:text-cyan-700   text-sm font-semibold rounded text-sm "
                               onClick={() => onAddItem(i)}
+                              title="Add Item"
                             >
-                              Add Item
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-6 w-6"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V8z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
                             </button>
                           </div>
                         </div>
 
                         {/* card body */}
-                        <div id={`div${i}`} onDrop={drop} onDragOver={allowDrop} className="space-y-2">
+                        <div
+                          id={`div${i}`}
+                          onDrop={drop}
+                          onDragOver={allowDrop}
+                          className="space-y-2"
+                        >
                           {card.items.map((item, j) => (
                             <div
                               className="flex gap-x-2 justify-between items-center px-2 py-1 h-auto w-full bg-gray-300 text-gray-500  rounded-sm text-sm "
                               key={j}
                               id={`${j}`}
-                              draggable={true} 
+                              draggable={true}
                               onDragStart={drag}
                             >
                               {item.is_edit_mode ? (
@@ -275,31 +295,67 @@ const drop = (ev) => {
                               )}
                               {item.is_edit_mode ? (
                                 <button
-                                  className="  px-2 py-1 h-auto  bg-gray-600 text-gray-300 hover:text-cyan-700   text-sm font-semibold rounded text-xs"
+                                  title="Done"
+                                  className="  px-2 py-1 h-auto   text-gray-600 hover:text-cyan-700   text-sm font-semibold rounded text-xs"
                                   onClick={() => onClickDone(i, j)}
                                 >
-                                  done
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-5 w-5"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
                                 </button>
                               ) : (
                                 <div className="flex gap-x-2 justify-between items-center">
                                   <button
-                                    className="  px-2 py-1 h-auto  bg-gray-600 text-gray-300 hover:text-cyan-700   text-sm font-semibold rounded text-xs"
-                                    onClick={() => onClickDelete(i, j)}
-                                  >
-                                    Delete
-                                  </button>
-                                  <button
-                                    className="  px-2 py-1 h-auto  bg-gray-600 text-gray-300 hover:text-cyan-700   text-sm font-semibold rounded text-xs"
+                                    title="Edit"
+                                    className="  px-2 py-1 h-auto  text-gray-600 hover:text-cyan-700   text-sm font-semibold rounded text-xs"
                                     onClick={() => onClickEdit(i, j)}
                                   >
-                                    Edit
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="h-5 w-5"
+                                      viewBox="0 0 20 20"
+                                      fill="currentColor"
+                                    >
+                                      <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                                      <path
+                                        fillRule="evenodd"
+                                        d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
+                                        clipRule="evenodd"
+                                      />
+                                    </svg>
+                                  </button>
+                                  <button
+                                    title="Delete"
+                                    className="  px-2 py-1 h-auto   text-gray-600 hover:text-red-700   text-sm font-semibold rounded text-xs"
+                                    onClick={() => onClickDelete(i, j)}
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="h-5 w-5"
+                                      viewBox="0 0 20 20"
+                                      fill="currentColor"
+                                    >
+                                      <path
+                                        fillRule="evenodd"
+                                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                        clipRule="evenodd"
+                                      />
+                                    </svg>
                                   </button>
                                 </div>
                               )}
                             </div>
                           ))}
                         </div>
-
 
                         {/* new List Btn */}
                         {card.is_locked ? (
