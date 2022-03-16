@@ -152,7 +152,7 @@ export default function Home() {
             Kanban-style-list-making Demo
           </h1>
           <section className="container mx-auto py-4">
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid sm:grid-cols-3 gap-4">
               {data.map((card, i) => {
                 return (
                   <div
